@@ -26,6 +26,14 @@ public class Ponto {
 		return y;
 	}
 	
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
 	public Ponto mult(float n) {
 		return new Ponto(n * x, n * y);
 	}
@@ -37,4 +45,5 @@ public class Ponto {
 	public String toString() {
 		return "Ponto " + nome + "(" + x + ", " + y + ")";
 	}
+	
 }
