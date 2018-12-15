@@ -20,13 +20,13 @@ public class Testes {
 		pontos[3] = new Ponto(-2.0, 2.0, "3");
 		pontos[4] = new Ponto(2.0, 2.0, "4");
 		
-		printControles(pontos);
+		//printControles(pontos);
 		
 		CurvaBezier curva = new CurvaBezier(4, pontos, 0.5);
 		
-		printControles(curva.getControles());
+		//printControles(curva.getControles());
 		
-		System.out.println("Qtd:" + curva.getQtd() + "\n");
+		//System.out.println("Qtd:" + curva.getQtd() + "\n");
 		
 		curva.calcularPontos();
 		

@@ -48,6 +48,20 @@ public class CurvaBezier {
 		return pontos[0][grau];
 	}
 	
+	
+	public Ponto formaGeral(int j, int r) {
+		
+		Ponto bjr = new Ponto(0,0);
+		
+		for(int i=0; i<r; i++) {
+			bjr = bjr.adi(controles[i+j].mult(Funcoes.bi(i, r, t)));
+		}
+		
+		bjr.setNome(j + "" + r);
+		
+		return bjr;
+	}
+	
 	public void calcularPontos(){
 		
 		controlesParaMatriz();
@@ -60,7 +74,7 @@ public class CurvaBezier {
 				p.setNome(i + "" + r);
 				pontos[i][r] = p;
 				
-				System.out.println("Adicionei: " + p.toString());
+				//System.out.println("Adicionei: " + p.toString());
 			}
 		}
 	}
