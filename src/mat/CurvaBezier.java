@@ -5,7 +5,7 @@ public class CurvaBezier {
 	private int grau;
 	private Ponto[] controles;
 	private double t;
-	//private Ponto[] curva;
+	private int qtd;
 	
 	private Ponto[][] pontos;
 	
@@ -13,16 +13,19 @@ public class CurvaBezier {
 		this.grau = grau;
 		this.controles = controles;
 		this.t = t;
-		//this.curva =  new Ponto[Funcoes.numPontos(grau)];
-		this.pontos = new Ponto[grau+1][grau+1];
+		this.qtd = controles.length;
+		this.pontos = new Ponto[qtd][qtd];
 	}
 	
 	private void controlesParaMatriz(){
 		
-		for(int i=0; i<controles.length; i++){
+		for(int i=0; i<qtd; i++){
 			 pontos[i][0] = controles[i];
 		}
-		
+	}
+
+	public int getQtd() {
+		return qtd;
 	}
 
 	public Ponto[] getControles() {
@@ -41,81 +44,24 @@ public class CurvaBezier {
 		return t;
 	}
 	
-	/**
-	public Ponto getPontoCurva() {
-		return curva[curva.length - 1];
-	}
-	**/
-	
 	public Ponto pontoDaCurva(){
 		return pontos[0][grau];
 	}
-	
-	/**
-
-	public Ponto formaGeral(int j, int r) {
-		
-		Ponto bjr = new Ponto(0,0);
-		
-		for(int i=0; i<r; i++) {
-			bjr = bjr.adi(controles[i+j].mult(Funcoes.bi(i, r, t)));
-		}
-		
-		bjr.setNome(j + "" + r);
-		
-		return bjr;
-	}
-	
-	**/
 	
 	public void calcularPontos(){
 		
 		controlesParaMatriz();
 		
-		for(int r=1; r<=grau; r++){
-			for(int i=0; i<(grau - r); i++){
+		for(int r=1; r < qtd; r++){
+			//System.out.println("R: " + r);
+			for(int i=0; i<(qtd - r); i++){
+				//System.out.println("R: " + r + ", I: " + i);
 				Ponto p = Funcoes.interp(pontos[i][r-1], pontos[i+1][r-1], t);
 				p.setNome(i + "" + r);
 				pontos[i][r] = p;
 				
-				System.out.println("Adicionei ponto: " + p.toString());
+				System.out.println("Adicionei: " + p.toString());
 			}
 		}
 	}
-	
-	/**
-	public void calculaPontos() {
-		int last = -1;
-		
-		for(int r=1; r<=grau; r++) {
-			for(int i=0; i<(grau-r); i++) {
-				Ponto p = formaGeral(i, r);
-				p.setNome(i + "" + r);
-				
-				System.out.println("Adicionei ponto: " + p.toString());
-				
-				last++;
-				curva[last] = p;
-			}
-		}
-			
-	}
-	
-	
-	public String curvaToString(){
-		String s = "Pontos da curva:";
-		
-		for(int i=0; i<curva.length; i++){
-			s = s + "\n" + curva[i].toString();
-		}
-		
-		return s;
-	}
-	
-	public int curvaLength(){
-		return curva.length;
-	}
-	
-	**/
-
 }
