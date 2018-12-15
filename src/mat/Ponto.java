@@ -2,27 +2,27 @@ package mat;
 
 public class Ponto {
 	
-	private float x;
-	private float y;
+	private double x;
+	private double y;
 	private String nome;
 	
-	public Ponto(float x, float y){
+	public Ponto(double x, double y){
 		this.x = x;
 		this.y = y;
 		this.nome = "ponto";
 	}
 	
-	public Ponto(float x, float y, String nome){
+	public Ponto(double x, double y, String nome){
 		this.x = x;
 		this.y = y;
 		this.nome = nome;
 	}
 	
-	public float getX(){
+	public double getX(){
 		return x;
 	}
 	
-	public float getY(){
+	public double getY(){
 		return y;
 	}
 	
@@ -34,7 +34,7 @@ public class Ponto {
 		this.nome = nome;
 	}
 
-	public Ponto mult(float n) {
+	public Ponto mult(double n) {
 		return new Ponto(n * x, n * y);
 	}
 	
