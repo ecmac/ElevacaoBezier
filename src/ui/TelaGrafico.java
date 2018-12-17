@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import mat.CurvaBezier;
 import mat.Funcoes;
 import mat.Ponto;
+import java.awt.event.MouseMotionAdapter;
 
 @SuppressWarnings("serial")
 public class TelaGrafico extends JPanel {
@@ -30,7 +31,26 @@ public class TelaGrafico extends JPanel {
 	private boolean mostrarPontos = true;
 	private boolean mostrarPoligonal = true;
 	
+	private boolean arrastar = false;
+	private int indiceArrastado;
+	
 	public TelaGrafico(){
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				
+				if(arrastar){
+					double x = arg0.getX();
+					double y = arg0.getY();
+					double realY = converter(y, getHeight());
+					
+					pontos.get(indiceArrastado).arrastar(x, realY);
+					repaint();
+				}
+				
+				//TODO
+			}
+		});
 		pontos = new ArrayList<Ponto>();
 		setBackground(Color.WHITE);
 		
@@ -42,13 +62,40 @@ public class TelaGrafico extends JPanel {
 				double y = arg0.getY();
 				double realY = converter(y, getHeight());
 				
-				pontos.add(new Ponto(x, realY,"" + nomePontoControle));
+				boolean tem = false;
 				
+				for(int i=0; i<pontos.size(); i++){
+					Ponto pt = pontos.get(i);
+					double xP = pt.getX();
+					double yP = pt.getY();
+					
+					if(x==xP && y==realY){
+						tem = true;
+						arrastar = true;
+						indiceArrastado = i;
+					}
+					
+					if(tem) i=pontos.size();
+				}
+				
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				arrastar = false;
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				double x = arg0.getX();
+				double y = arg0.getY();
+				double realY = converter(y, getHeight());
+				
+				pontos.add(new Ponto(x, realY,"" + nomePontoControle));
 				nomePontoControle++;
 				
 				repaint();
-				
-				System.out.println("Posição do mouse (" + x + ", " + y + ")");
 				
 			}
 		});
@@ -173,7 +220,7 @@ public class TelaGrafico extends JPanel {
 	public void calcularCurvaPontos(){
 		
 		curvaaa= new ArrayList<Ponto>();
-		for(double t=0.025; t<1; t=t+0.025){
+		for(double t=0.01; t<1; t=t+0.01){
 			curvaaa.add(fazerPontoDaCurva(t));
 		}
 	}
@@ -192,6 +239,14 @@ public class TelaGrafico extends JPanel {
 		return array;
 	}
 	
+	public void setPontos(ArrayList<Ponto> pontos) {
+		this.pontos = pontos;
+	}
+
+	public ArrayList<Ponto> getPontos() {
+		return pontos;
+	}
+
 	public void printArrayList(){
 		for(Ponto ponto : pontos){
 			System.out.println(ponto.toString() + ", yVirtual: " + converter(ponto.getY(), getHeight()));
@@ -200,6 +255,42 @@ public class TelaGrafico extends JPanel {
 	
 	public double converter(double y, int height) {
 		return height - y;
+	}
+	
+	/* FONTE:
+	 * Farin & Hansford - The Essentials of CAGD
+	 * Slides do capítulo 4
+	 * Slides 16 a 20
+	 */
+	
+	public ArrayList<Ponto> elevarGrau(){
+		
+		Ponto[] antes = getArray(pontos);
+		
+		double n = antes.length - 1.0;
+		
+		//Ponto[] depois = new Ponto[antes.length + 1];
+		
+		ArrayList<Ponto> depois = new ArrayList<Ponto>();
+		
+		depois.add(antes[0]);
+		
+		
+		for(double i=1.0; i<=n; i++){
+			//depois[i] = ((double)i/(n+1))*antes[i-1] + 
+			double m1 = i/(n+1.0);
+			Ponto p1 = antes[(int)i - 1].mult(m1);
+			
+			//(1.0 - (double)i/(n+1))*antes[i]
+			double m2 = 1.0 - (i/(n+1.0));
+			Ponto p2 = antes[(int)i].mult(m2);
+			
+			depois.add(p1.adi(p2));
+		}
+		
+		depois.add(antes[(int)n]);
+		
+		return depois;
 	}
 	
 }

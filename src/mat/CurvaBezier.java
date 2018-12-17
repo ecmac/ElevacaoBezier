@@ -88,4 +88,50 @@ public class CurvaBezier {
 			}
 		}
 	}
+	
+	
+	
+	
+	/**
+	public void elevarGrau(Ponto[] controle){
+		
+		double[][] matriz = gerarMatriz(controle.length);
+	}
+	
+	public double[][] gerarMatriz(int qtd){
+		
+		double[][] valores = new double[qtd+1][qtd];
+		
+		for(int i=0; i<qtd+1; i++){
+			for(int j=0; j<qtd; j++){
+				
+			}
+		}
+		
+		return null;
+	}
+	**/
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
