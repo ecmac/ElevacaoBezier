@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import mat.CurvaBezier;
 import mat.Funcoes;
 import mat.Ponto;
 
@@ -19,7 +20,8 @@ import mat.Ponto;
 public class TelaGrafico extends JPanel {
 	
 	private ArrayList<Ponto> pontos;
-	//private int t;
+	
+	private double t;
 	private Graphics2D g2d;
 	private int nomePontoControle = 0;
 	
@@ -30,8 +32,6 @@ public class TelaGrafico extends JPanel {
 	public TelaGrafico(){
 		pontos = new ArrayList<Ponto>();
 		setBackground(Color.WHITE);
-		
-		//this.t = t;
 		
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -45,14 +45,15 @@ public class TelaGrafico extends JPanel {
 				
 				nomePontoControle++;
 				
-				//g2d.fillOval(x, virtualY, 20, 200);
 				repaint();
-				
-				//JOptionPane.showMessageDialog(frmPrincipal, "(" + x + ", " + y + ")" , "Posição do mouse", JOptionPane.INFORMATION_MESSAGE);
 				
 				System.out.println("Posição do mouse (" + x + ", " + y + ")");
 			}
 		});
+	}
+
+	public void setT(double t) {
+		this.t = t;
 	}
 
 	@Override
@@ -66,12 +67,13 @@ public class TelaGrafico extends JPanel {
 		
 		if(mostrarPontos){
 			for(Ponto ponto : pontos){
-				//g2d.fillOval(ponto.getX(), ponto.getY(), 10, 10);
 				double yVirtual = Funcoes.converter(ponto.getY(), getHeight());
 				Ellipse2D.Double circ = new Ellipse2D.Double(ponto.getX(), yVirtual, 5, 5);
 				g2d.fill(circ);
 			}
 		}
+		
+		/**
 		
 		if(mostrarPoligonal){
 			
@@ -82,10 +84,14 @@ public class TelaGrafico extends JPanel {
 			
 			//TODO
 			
-			if(pontos.size()>=2){
-				//TODO
-			}
+			Ponto daCurva = fazerCurva();
+			
+			double yVirt = Funcoes.converter(daCurva.getY(), getHeight());
+			Ellipse2D.Double pto = new Ellipse2D.Double(daCurva.getX(), yVirt, 5, 5);
+			g2d.fill(pto);
 		}
+		
+		**/
 		
 	}
 	
@@ -107,5 +113,55 @@ public class TelaGrafico extends JPanel {
 	public void resetar(){
 		pontos.clear();
 		repaint();
+	}
+	
+	public Ponto fazerCurva(){
+		
+		int grau = pontos.size() - 1;
+		Ponto[] controles = getArray(pontos);
+		CurvaBezier curvaBezier = new CurvaBezier(grau, controles, t);
+		return curvaBezier.formaGeral(0, grau);
+		
+	}
+	
+	/**
+	public void gerarCurva(){
+		if(pontos.size()>2){
+			Ponto[] ptos = getArray(pontos);
+			CurvaBezier curva = new CurvaBezier(pontos.size() - 1, ptos, t);
+			curva.calcularPontos();
+			pontoDaCurva = curva.pontoDaCurva();
+		}
+		else if(pontos.size()==2){
+			pontoDaCurva = Funcoes.interp(pontos.get(0), pontos.get(1), t);
+		}
+		
+		if(pontoDaCurva!=null){
+			double yVirtual = Funcoes.converter(pontoDaCurva.getY(), getHeight());
+			Ellipse2D.Double pc = new Ellipse2D.Double(pontoDaCurva.getX(), yVirtual, 5, 5);
+			g2d.fill(pc);
+			System.out.println("Ponto da curva parcial: (" + pontoDaCurva.getX() + ", " + yVirtual + ")");
+		}		
+	}
+	**/
+	
+	public Ponto[] getArray(ArrayList<Ponto> al){
+		
+		int length = al.size();
+		Ponto[] array = new Ponto[length];
+		
+		int i = 0;
+		for(Ponto ponto : al){
+			array[i] = ponto;
+			i++;
+		}
+		
+		return array;
+	}
+	
+	public void printArrayList(){
+		for(Ponto ponto : pontos){
+			System.out.println(ponto.toString() + ", yVirtual: " + Funcoes.converter(ponto.getY(), getHeight()));
+		}
 	}
 }

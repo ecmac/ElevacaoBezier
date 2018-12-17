@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import java.awt.Color;
+import javax.swing.border.LineBorder;
 
 public class MainGUI {
 
@@ -32,6 +33,8 @@ public class MainGUI {
 	
 	private boolean mostraPontos = true;
 	JButton btnEsconderPontos;
+	
+	private JLabel lblValorDeT;
 
 	/**
 	 * Launch the application.
@@ -70,6 +73,7 @@ public class MainGUI {
 		frmPrincipal.getContentPane().setLayout(null);
 		
 		tela = new TelaGrafico();
+		tela.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		tela.setBackground(Color.WHITE);
 		tela.setBounds(10, 11, 510, 449);
 		frmPrincipal.getContentPane().add(tela);
@@ -80,7 +84,7 @@ public class MainGUI {
 		btnResetar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//TODO
+				
 				
 				resetar();
 			}
@@ -92,7 +96,7 @@ public class MainGUI {
 		btnEsconderCurva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//TODO
+				
 				
 				escondeCurva();
 			}
@@ -104,7 +108,7 @@ public class MainGUI {
 		btnEsconderPontos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//TODO
+				
 				
 				escondePontos();
 			}
@@ -116,14 +120,14 @@ public class MainGUI {
 		btnEsconderPoligonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//TODO
+				
 				
 				escondePoligonal();
 			}
 		});
 		frmPrincipal.getContentPane().add(btnEsconderPoligonal);
 		
-		JLabel lblValorDeT = new JLabel("Valor de t");
+		lblValorDeT = new JLabel("Valor de t");
 		lblValorDeT.setBounds(564, 247, 86, 20);
 		lblValorDeT.setHorizontalAlignment(SwingConstants.CENTER);
 		frmPrincipal.getContentPane().add(lblValorDeT);
@@ -146,6 +150,8 @@ public class MainGUI {
 					
 					System.out.println("t=" + tDouble);
 					
+					tela.setT(tDouble);
+					
 				}
 				catch(Exception ex){
 					JOptionPane.showMessageDialog(frmPrincipal, "Insira um número válido entre 0 e 1", "Valor inválido", JOptionPane.ERROR_MESSAGE);
@@ -153,6 +159,17 @@ public class MainGUI {
 			}
 		});
 		frmPrincipal.getContentPane().add(btnAplicar);
+		
+		JButton btnTest = new JButton("test");
+		btnTest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				tela.printArrayList();
+				
+			}
+		});
+		btnTest.setBounds(544, 389, 89, 23);
+		frmPrincipal.getContentPane().add(btnTest);
 		
 		
 		
