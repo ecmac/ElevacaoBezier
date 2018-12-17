@@ -22,15 +22,20 @@ public class Testes {
 		
 		//printControles(pontos);
 		
-		CurvaBezier curva = new CurvaBezier(4, pontos, 0.5);
+		int grau = 4;
+		
+		CurvaBezier curva = new CurvaBezier(grau, pontos, 0.5);
 		
 		//printControles(curva.getControles());
 		
 		//System.out.println("Qtd:" + curva.getQtd() + "\n");
 		
-		curva.calcularPontos();
+		//curva.calcularPontos();
 		
-		Ponto pc = curva.pontoDaCurva();
+		//Ponto pc = curva.pontoDaCurva();
+		
+		Ponto pc = curva.birt(0, grau);
+		
 		
 		if (pc==null) System.out.println("PC is null");
 		else System.out.println(pc.toString());

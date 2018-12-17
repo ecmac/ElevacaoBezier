@@ -38,10 +38,7 @@ public class Funcoes {
 		return soma;
 	}
 
-	public static double converter(double y, int height) {
-		// TODO Auto-generated method stub
-		return height - y;
-	}
+	
 	
 	
 }

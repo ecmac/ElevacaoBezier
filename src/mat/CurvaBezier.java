@@ -62,6 +62,16 @@ public class CurvaBezier {
 		return bjr;
 	}
 	
+	public Ponto birt(int i, int r){
+		
+		if(r==0) return controles[i];
+		
+		Ponto esq = birt(i, r-1);
+		Ponto dir = birt(i+1, r-1);
+		
+		return Funcoes.interp(esq, dir, t);
+	}
+	
 	public void calcularPontos(){
 		
 		controlesParaMatriz();

@@ -10,6 +10,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import mat.CurvaBezier;
@@ -20,8 +21,8 @@ import mat.Ponto;
 public class TelaGrafico extends JPanel {
 	
 	private ArrayList<Ponto> pontos;
+	private ArrayList<Ponto> curvaaa;
 	
-	private double t;
 	private Graphics2D g2d;
 	private int nomePontoControle = 0;
 	
@@ -39,7 +40,7 @@ public class TelaGrafico extends JPanel {
 				
 				double x = arg0.getX();
 				double y = arg0.getY();
-				double realY = Funcoes.converter(y, getHeight());
+				double realY = converter(y, getHeight());
 				
 				pontos.add(new Ponto(x, realY,"" + nomePontoControle));
 				
@@ -48,12 +49,9 @@ public class TelaGrafico extends JPanel {
 				repaint();
 				
 				System.out.println("Posição do mouse (" + x + ", " + y + ")");
+				
 			}
 		});
-	}
-
-	public void setT(double t) {
-		this.t = t;
 	}
 
 	@Override
@@ -67,31 +65,79 @@ public class TelaGrafico extends JPanel {
 		
 		if(mostrarPontos){
 			for(Ponto ponto : pontos){
-				double yVirtual = Funcoes.converter(ponto.getY(), getHeight());
+				double yVirtual = converter(ponto.getY(), getHeight());
 				Ellipse2D.Double circ = new Ellipse2D.Double(ponto.getX(), yVirtual, 5, 5);
 				g2d.fill(circ);
-			}
+			}			
 		}
 		
-		/**
+		
 		
 		if(mostrarPoligonal){
 			
-			//TODO
+			for(int i=0; i<pontos.size()-1; i++){
+				
+				Ponto p = pontos.get(i);
+				double yVirtual = converter(p.getY(), getHeight());
+				
+				Ponto prox = pontos.get(i+1);
+				double yProxV = converter(prox.getY(), getHeight());
+				
+				Line2D.Double line = new Line2D.Double(p.getX(), yVirtual, prox.getX(), yProxV);
+				g2d.draw(line);
+				
+			}
 		}
+		
 		
 		if(mostrarCurva){
 			
-			//TODO
-			
-			Ponto daCurva = fazerCurva();
-			
-			double yVirt = Funcoes.converter(daCurva.getY(), getHeight());
-			Ellipse2D.Double pto = new Ellipse2D.Double(daCurva.getX(), yVirt, 5, 5);
-			g2d.fill(pto);
+			if(pontos.size()>=2){
+				
+				calcularCurvaPontos();
+				
+				for(int i=0; i<curvaaa.size(); i++){
+					
+					Ponto p = curvaaa.get(i);
+					double yVirtual = converter(p.getY(), getHeight());
+					
+					//Desenhar o subponto
+					Ellipse2D.Double circ = new Ellipse2D.Double(p.getX(), yVirtual, 1, 1);
+					g2d.fill(circ);
+					
+					//Reta do primeiro ponto de controle ao primeiro subponto
+					if(i==0){
+						Ponto p1 = pontos.get(0);
+						double y00V = converter(p1.getY(), getHeight());
+						Line2D.Double line1 = new Line2D.Double(p1.getX(), y00V,
+								p.getX(), yVirtual);
+						g2d.draw(line1);
+					}
+					
+					//Reta do ultimo subponto ao ultimo ponto de controle
+					if(i==(curvaaa.size()-1)){
+						Ponto pF = pontos.get(pontos.size()-1);
+						double yUltimoV = converter(pF.getY(), getHeight());
+						Line2D.Double lineLast = new Line2D.Double(p.getX(), yVirtual, 
+								pF.getX(), yUltimoV);
+						g2d.draw(lineLast);
+					}
+					
+					//Desenhar a reta ao proximo subponto
+					else {
+						Ponto pProx = curvaaa.get(i+1);
+						double yProxV = converter(pProx.getY(), getHeight());
+						
+						Line2D.Double line = new Line2D.Double(p.getX(), yVirtual, pProx.getX(), yProxV);
+						g2d.draw(line);
+						
+						
+					}
+				}
+			}			
 		}
 		
-		**/
+		
 		
 	}
 	
@@ -115,35 +161,22 @@ public class TelaGrafico extends JPanel {
 		repaint();
 	}
 	
-	public Ponto fazerCurva(){
+	public Ponto fazerPontoDaCurva(double t){
 		
 		int grau = pontos.size() - 1;
 		Ponto[] controles = getArray(pontos);
 		CurvaBezier curvaBezier = new CurvaBezier(grau, controles, t);
-		return curvaBezier.formaGeral(0, grau);
+		return curvaBezier.birt(0, grau);
 		
 	}
 	
-	/**
-	public void gerarCurva(){
-		if(pontos.size()>2){
-			Ponto[] ptos = getArray(pontos);
-			CurvaBezier curva = new CurvaBezier(pontos.size() - 1, ptos, t);
-			curva.calcularPontos();
-			pontoDaCurva = curva.pontoDaCurva();
-		}
-		else if(pontos.size()==2){
-			pontoDaCurva = Funcoes.interp(pontos.get(0), pontos.get(1), t);
-		}
+	public void calcularCurvaPontos(){
 		
-		if(pontoDaCurva!=null){
-			double yVirtual = Funcoes.converter(pontoDaCurva.getY(), getHeight());
-			Ellipse2D.Double pc = new Ellipse2D.Double(pontoDaCurva.getX(), yVirtual, 5, 5);
-			g2d.fill(pc);
-			System.out.println("Ponto da curva parcial: (" + pontoDaCurva.getX() + ", " + yVirtual + ")");
-		}		
+		curvaaa= new ArrayList<Ponto>();
+		for(double t=0.025; t<1; t=t+0.025){
+			curvaaa.add(fazerPontoDaCurva(t));
+		}
 	}
-	**/
 	
 	public Ponto[] getArray(ArrayList<Ponto> al){
 		
@@ -161,7 +194,12 @@ public class TelaGrafico extends JPanel {
 	
 	public void printArrayList(){
 		for(Ponto ponto : pontos){
-			System.out.println(ponto.toString() + ", yVirtual: " + Funcoes.converter(ponto.getY(), getHeight()));
+			System.out.println(ponto.toString() + ", yVirtual: " + converter(ponto.getY(), getHeight()));
 		}
 	}
+	
+	public double converter(double y, int height) {
+		return height - y;
+	}
+	
 }

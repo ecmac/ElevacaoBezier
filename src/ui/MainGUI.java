@@ -21,7 +21,6 @@ import javax.swing.border.LineBorder;
 public class MainGUI {
 
 	private JFrame frmPrincipal;
-	private JTextField tValorField;
 	
 	private TelaGrafico tela;
 	
@@ -33,8 +32,6 @@ public class MainGUI {
 	
 	private boolean mostraPontos = true;
 	JButton btnEsconderPontos;
-	
-	private JLabel lblValorDeT;
 
 	/**
 	 * Launch the application.
@@ -75,12 +72,12 @@ public class MainGUI {
 		tela = new TelaGrafico();
 		tela.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		tela.setBackground(Color.WHITE);
-		tela.setBounds(10, 11, 510, 449);
+		tela.setBounds(10, 11, 522, 449);
 		frmPrincipal.getContentPane().add(tela);
 		tela.setLayout(null);
 		
 		JButton btnResetar = new JButton("Resetar");
-		btnResetar.setBounds(530, 21, 154, 40);
+		btnResetar.setBounds(564, 11, 98, 40);
 		btnResetar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -92,7 +89,7 @@ public class MainGUI {
 		frmPrincipal.getContentPane().add(btnResetar);
 		
 		btnEsconderCurva = new JButton("Esconder curva");
-		btnEsconderCurva.setBounds(530, 72, 154, 40);
+		btnEsconderCurva.setBounds(546, 62, 134, 40);
 		btnEsconderCurva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -104,7 +101,7 @@ public class MainGUI {
 		frmPrincipal.getContentPane().add(btnEsconderCurva);
 		
 		btnEsconderPontos = new JButton("Esconder pontos");
-		btnEsconderPontos.setBounds(530, 123, 154, 40);
+		btnEsconderPontos.setBounds(546, 113, 134, 40);
 		btnEsconderPontos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -116,7 +113,7 @@ public class MainGUI {
 		frmPrincipal.getContentPane().add(btnEsconderPontos);
 		
 		btnEsconderPoligonal = new JButton("Esconder poligonal");
-		btnEsconderPoligonal.setBounds(530, 174, 154, 40);
+		btnEsconderPoligonal.setBounds(542, 164, 142, 40);
 		btnEsconderPoligonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -127,18 +124,20 @@ public class MainGUI {
 		});
 		frmPrincipal.getContentPane().add(btnEsconderPoligonal);
 		
+		/**
 		lblValorDeT = new JLabel("Valor de t");
-		lblValorDeT.setBounds(564, 247, 86, 20);
+		lblValorDeT.setBounds(570, 247, 86, 20);
 		lblValorDeT.setHorizontalAlignment(SwingConstants.CENTER);
 		frmPrincipal.getContentPane().add(lblValorDeT);
 		
 		tValorField = new JTextField();
-		tValorField.setBounds(564, 278, 86, 20);
+		tValorField.setBounds(570, 278, 86, 20);
 		frmPrincipal.getContentPane().add(tValorField);
 		tValorField.setColumns(10);
 		
+		
 		JButton btnAplicar = new JButton("Aplicar");
-		btnAplicar.setBounds(530, 309, 154, 40);
+		btnAplicar.setBounds(564, 309, 98, 40);
 		btnAplicar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -151,14 +150,17 @@ public class MainGUI {
 					System.out.println("t=" + tDouble);
 					
 					tela.setT(tDouble);
+					tela.repaint();
 					
 				}
 				catch(Exception ex){
-					JOptionPane.showMessageDialog(frmPrincipal, "Insira um número válido entre 0 e 1", "Valor inválido", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(frmPrincipal, "Insira um número válido entre 0 e 1", 
+							"Valor inválido", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		frmPrincipal.getContentPane().add(btnAplicar);
+		**/
 		
 		JButton btnTest = new JButton("test");
 		btnTest.addActionListener(new ActionListener() {
@@ -168,8 +170,9 @@ public class MainGUI {
 				
 			}
 		});
-		btnTest.setBounds(544, 389, 89, 23);
+		btnTest.setBounds(590, 404, 66, 23);
 		frmPrincipal.getContentPane().add(btnTest);
+		btnTest.setVisible(false);
 		
 		
 		
