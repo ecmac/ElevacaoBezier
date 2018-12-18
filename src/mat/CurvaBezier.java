@@ -7,22 +7,22 @@ public class CurvaBezier {
 	private double t;
 	private int qtd;
 	
-	private Ponto[][] pontos;
+	//private Ponto[][] pontos;
 	
 	public CurvaBezier(int grau, Ponto[] controles, double t) {
 		this.grau = grau;
 		this.controles = controles;
 		this.t = t;
 		this.qtd = controles.length;
-		this.pontos = new Ponto[qtd][qtd];
+		//this.pontos = new Ponto[qtd][qtd];
 	}
 	
-	private void controlesParaMatriz(){
+	/**private void controlesParaMatriz(){
 		
 		for(int i=0; i<qtd; i++){
 			 pontos[i][0] = controles[i];
 		}
-	}
+	}**/
 
 	public int getQtd() {
 		return qtd;
@@ -44,11 +44,11 @@ public class CurvaBezier {
 		return t;
 	}
 	
-	public Ponto pontoDaCurva(){
+	/**public Ponto pontoDaCurva(){
 		return pontos[0][grau];
-	}
+	}**/
 	
-	
+	/**
 	public Ponto formaGeral(int j, int r) {
 		
 		Ponto bjr = new Ponto(0,0);
@@ -60,6 +60,10 @@ public class CurvaBezier {
 		bjr.setNome(j + "" + r);
 		
 		return bjr;
+	}**/
+	
+	public Ponto interp (Ponto a, Ponto b, double t) {
+		return (a.mult(1-t)).adi(b.mult(t));
 	}
 	
 	public Ponto birt(int i, int r){
@@ -69,10 +73,10 @@ public class CurvaBezier {
 		Ponto esq = birt(i, r-1);
 		Ponto dir = birt(i+1, r-1);
 		
-		return Funcoes.interp(esq, dir, t);
+		return interp(esq, dir, t);
 	}
 	
-	public void calcularPontos(){
+	/**public void calcularPontos(){
 		
 		controlesParaMatriz();
 		
@@ -87,7 +91,7 @@ public class CurvaBezier {
 				//System.out.println("Adicionei: " + p.toString());
 			}
 		}
-	}
+	}**/
 	
 	
 	

@@ -16,6 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
 public class MainGUI extends JFrame{
@@ -33,6 +34,8 @@ public class MainGUI extends JFrame{
 	
 	private double avalInc;
 	private int numAval;
+	
+	private boolean apagarPonto;
 
 	/**
 	 * Launch the application.
@@ -82,7 +85,7 @@ public class MainGUI extends JFrame{
 		
 		JLabel lblAvaliaes = new JLabel("Avalia\u00E7\u00F5es");
 		lblAvaliaes.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAvaliaes.setBounds(563, 320, 100, 30);
+		lblAvaliaes.setBounds(564, 309, 100, 30);
 		getContentPane().add(lblAvaliaes);
 		
 		JSpinner spinner = new JSpinner();
@@ -100,7 +103,7 @@ public class MainGUI extends JFrame{
 		});
 		spinner.setModel(new SpinnerNumberModel(new Integer(numAval), 
 				new Integer(1), null, new Integer(1)));
-		spinner.setBounds(589, 354, 48, 23);
+		spinner.setBounds(590, 343, 48, 23);
 		getContentPane().add(spinner);
 		
 		avalInc = calcularValorInc(numAval);
@@ -169,6 +172,19 @@ public class MainGUI extends JFrame{
 		});
 		btnElevarGrau.setBounds(559, 245, 108, 40);
 		getContentPane().add(btnElevarGrau);
+		
+		JCheckBox chckbxClicarApagar = new JCheckBox("Clicar \u00E9 apagar");
+		chckbxClicarApagar.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				
+				apagarPonto = chckbxClicarApagar.isSelected();
+				tela.setApagarPonto(apagarPonto);
+			}
+		});
+		chckbxClicarApagar.setBackground(new Color(255, 153, 0));
+		chckbxClicarApagar.setHorizontalAlignment(SwingConstants.CENTER);
+		chckbxClicarApagar.setBounds(552, 400, 123, 40);
+		getContentPane().add(chckbxClicarApagar);
 	}
 	
 	private void resetar(){

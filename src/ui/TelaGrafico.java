@@ -33,10 +33,12 @@ public class TelaGrafico extends JPanel {
 	private int indiceArrastado;
 	
 	private double avalInc;
+	private boolean apagarPonto;
 	
 	public TelaGrafico(double avalInc){
 		
 		this.avalInc = avalInc;
+		apagarPonto = false;
 		
 		addMouseMotionListener(new MouseMotionAdapter() {
 			
@@ -95,12 +97,27 @@ public class TelaGrafico extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
-				double x = arg0.getX();
-				double y = arg0.getY();
-				double realY = converter(y, getHeight());
+				if(apagarPonto) {
+					
+					double x = arg0.getX();
+					double y = arg0.getY();
+					double realY = converter(y, getHeight());
+					
+					int indice = temPonto(x, realY);
+					if(indice != -1) {
+						pontos.remove(indice);
+					}
+				}
+				else {
+					double x = arg0.getX();
+					double y = arg0.getY();
+					double realY = converter(y, getHeight());
+					
+					pontos.add(new Ponto(x, realY,"" + nomePontoControle));
+					nomePontoControle++;
+				}
 				
-				pontos.add(new Ponto(x, realY,"" + nomePontoControle));
-				nomePontoControle++;
+				
 				
 				repaint();
 				
@@ -331,6 +348,10 @@ public class TelaGrafico extends JPanel {
 		}
 		
 		return indice;
+	}
+
+	public void setApagarPonto(boolean apagarPonto) {
+		this.apagarPonto = apagarPonto;
 	}
 	
 }

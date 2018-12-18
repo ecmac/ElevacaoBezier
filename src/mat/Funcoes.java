@@ -2,7 +2,7 @@ package mat;
 
 public class Funcoes {
 	
-	public static Ponto interp (Ponto a, Ponto b, double t) {
+	/**public static Ponto interp (Ponto a, Ponto b, double t) {
 		return (a.mult(1-t)).adi(b.mult(t));
 	}
 	
@@ -36,7 +36,7 @@ public class Funcoes {
 		}
 		
 		return soma;
-	}
+	}**/
 
 	
 	
