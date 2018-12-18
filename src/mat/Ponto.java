@@ -4,18 +4,10 @@ public class Ponto {
 	
 	private double x;
 	private double y;
-	private String nome;
 	
 	public Ponto(double x, double y){
 		this.x = x;
 		this.y = y;
-		this.nome = "ponto";
-	}
-	
-	public Ponto(double x, double y, String nome){
-		this.x = x;
-		this.y = y;
-		this.nome = nome;
 	}
 	
 	public void arrastar(double x, double y){
@@ -30,14 +22,6 @@ public class Ponto {
 	public double getY(){
 		return y;
 	}
-	
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 
 	public Ponto mult(double n) {
 		return new Ponto(n * x, n * y);
@@ -48,7 +32,7 @@ public class Ponto {
 	}
 	
 	public String toString() {
-		return "Ponto " + nome + "(" + x + ", " + y + ")";
+		return "Ponto " + "(" + x + ", " + y + ")";
 	}
 	
 }

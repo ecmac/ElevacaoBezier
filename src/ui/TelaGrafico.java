@@ -23,7 +23,6 @@ public class TelaGrafico extends JPanel {
 	private ArrayList<Ponto> curvaaa;
 	
 	private Graphics2D g2d;
-	private int nomePontoControle = 0;
 	
 	private boolean mostrarCurva = true;
 	private boolean mostrarPontos = true;
@@ -57,8 +56,6 @@ public class TelaGrafico extends JPanel {
 					pontos.get(indiceArrastado).arrastar(x, realY);
 					repaint();
 				}
-				
-				//TODO
 			}
 		});
 		pontos = new ArrayList<Ponto>();
@@ -113,22 +110,17 @@ public class TelaGrafico extends JPanel {
 					double y = arg0.getY();
 					double realY = converter(y, getHeight());
 					
-					pontos.add(new Ponto(x, realY,"" + nomePontoControle));
-					nomePontoControle++;
+					pontos.add(new Ponto(x, realY));
 				}
-				
-				
-				
 				repaint();
-				
 			}
 		});
 	}
-
-	public void setAvalInc(double avalInc) {
-		this.avalInc = avalInc;
+	
+	public double converter(double y, int height) {
+		return height - y;
 	}
-
+	
 	@Override
 	public void paintComponent(Graphics g){
 		
@@ -179,10 +171,6 @@ public class TelaGrafico extends JPanel {
 					Ponto p = curvaaa.get(i);
 					double yVirtual = converter(p.getY(), getHeight());
 					
-					//Desenhar o subponto
-					/**Ellipse2D.Double circ = new Ellipse2D.Double(p.getX(), yVirtual, 1, 1);
-					g2d.fill(circ);**/
-					
 					//Reta do primeiro ponto de controle ao primeiro subponto
 					if(i==0){
 						Ponto p1 = pontos.get(0);
@@ -209,85 +197,10 @@ public class TelaGrafico extends JPanel {
 						Line2D.Double line = new Line2D.Double(
 								p.getX(), yVirtual, pProx.getX(), yProxV);
 						g2d.draw(line);
-						
-						
 					}
 				}
 			}			
 		}
-		
-		
-		
-	}
-	
-	public void toggleCurva(){
-		mostrarCurva = !mostrarCurva;
-		repaint();
-	}
-	
-	public void togglePontos(){
-		mostrarPontos = !mostrarPontos;
-		repaint();
-	}
-	
-	public void togglePoligonal(){
-		mostrarPoligonal = !mostrarPoligonal;
-		repaint();
-	}
-	
-	public void resetar(){
-		pontos.clear();
-		repaint();
-	}
-	
-	public Ponto fazerPontoDaCurva(double t){
-		
-		int grau = pontos.size() - 1;
-		Ponto[] controles = getArray(pontos);
-		CurvaBezier curvaBezier = new CurvaBezier(grau, controles, t);
-		return curvaBezier.birt(0, grau);
-		
-	}
-	
-	public void calcularCurvaPontos(){
-		
-		curvaaa= new ArrayList<Ponto>();
-		for(double t=avalInc; t<1; t=t+avalInc){
-			curvaaa.add(fazerPontoDaCurva(t));
-		}
-	}
-	
-	public Ponto[] getArray(ArrayList<Ponto> al){
-		
-		int length = al.size();
-		Ponto[] array = new Ponto[length];
-		
-		int i = 0;
-		for(Ponto ponto : al){
-			array[i] = ponto;
-			i++;
-		}
-		
-		return array;
-	}
-	
-	public void setPontos(ArrayList<Ponto> pontos) {
-		this.pontos = pontos;
-	}
-
-	public ArrayList<Ponto> getPontos() {
-		return pontos;
-	}
-
-	public void printArrayList(){
-		for(Ponto ponto : pontos){
-			System.out.println(ponto.toString() + ", yVirtual: " 
-					+ converter(ponto.getY(), getHeight()));
-		}
-	}
-	
-	public double converter(double y, int height) {
-		return height - y;
 	}
 	
 	/* FONTE:
@@ -295,7 +208,6 @@ public class TelaGrafico extends JPanel {
 	 * Slides do capítulo 4
 	 * Slides 16 a 20
 	 */
-	
 	public ArrayList<Ponto> elevarGrau(){
 		
 		Ponto[] antes = getArray(pontos);
@@ -326,6 +238,42 @@ public class TelaGrafico extends JPanel {
 		return depois;
 	}
 	
+	public void toggleCurva(){
+		mostrarCurva = !mostrarCurva;
+		repaint();
+	}
+	
+	public void togglePontos(){
+		mostrarPontos = !mostrarPontos;
+		repaint();
+	}
+	
+	public void togglePoligonal(){
+		mostrarPoligonal = !mostrarPoligonal;
+		repaint();
+	}
+	
+	public void resetar(){
+		pontos.clear();
+		repaint();
+	}
+	
+	public Ponto fazerPontoDaCurva(double t){
+		
+		int grau = pontos.size() - 1;
+		Ponto[] controles = getArray(pontos);
+		CurvaBezier curvaBezier = new CurvaBezier(grau, controles, t);
+		return curvaBezier.birt(0, grau);
+	}
+	
+	public void calcularCurvaPontos(){
+		
+		curvaaa= new ArrayList<Ponto>();
+		for(double t=avalInc; t<1; t=t+avalInc){
+			curvaaa.add(fazerPontoDaCurva(t));
+		}
+	}
+	
 	private boolean algumPerto(Ponto p, double xMouse, double yMouse) {
 		
 		double distancia = Math.sqrt(
@@ -348,6 +296,31 @@ public class TelaGrafico extends JPanel {
 		}
 		
 		return indice;
+	}
+	
+	public Ponto[] getArray(ArrayList<Ponto> al){
+		
+		int length = al.size();
+		Ponto[] array = new Ponto[length];
+		
+		int i = 0;
+		for(Ponto ponto : al){
+			array[i] = ponto;
+			i++;
+		}
+		return array;
+	}
+	
+	public void setAvalInc(double avalInc) {
+		this.avalInc = avalInc;
+	}
+	
+	public void setPontos(ArrayList<Ponto> pontos) {
+		this.pontos = pontos;
+	}
+
+	public ArrayList<Ponto> getPontos() {
+		return pontos;
 	}
 
 	public void setApagarPonto(boolean apagarPonto) {
