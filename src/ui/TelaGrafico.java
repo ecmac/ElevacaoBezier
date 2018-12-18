@@ -3,7 +3,6 @@ package ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -40,6 +39,11 @@ public class TelaGrafico extends JPanel {
 		this.avalInc = avalInc;
 		
 		addMouseMotionListener(new MouseMotionAdapter() {
+			
+			/**
+			 * Arrastar para mover o ponto
+			 * de controle de posição
+			 */
 			@Override
 			public void mouseDragged(MouseEvent arg0) {
 				
@@ -71,24 +75,17 @@ public class TelaGrafico extends JPanel {
 				double y = arg0.getY();
 				double realY = converter(y, getHeight());
 				
-				boolean tem = false;
-				
-				for(int i=0; i<pontos.size(); i++){
-					Ponto pt = pontos.get(i);
-					double xP = pt.getX();
-					double yP = pt.getY();
-					
-					if(x==xP && realY==yP){
-						tem = true;
-						arrastar = true;
-						indiceArrastado = i;
-					}
-					
-					if(tem) i=pontos.size();
+				int indice = temPonto(x, realY);
+				if(indice != -1) {
+					indiceArrastado = indice;
+					arrastar = true;
 				}
-				
-				
 			}
+			
+			/**
+			 * Se soltou e estava arrastando
+			 * então pare de arrastar o ponto de controle
+			 */
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				arrastar = false;
@@ -121,13 +118,15 @@ public class TelaGrafico extends JPanel {
 		super.paintComponent(g);
 		g2d = (Graphics2D)g;
 		
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+				RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.blue);
 		
 		if(mostrarPontos){
 			for(Ponto ponto : pontos){
 				double yVirtual = converter(ponto.getY(), getHeight());
-				Ellipse2D.Double circ = new Ellipse2D.Double(ponto.getX(), yVirtual, 5, 5);
+				Ellipse2D.Double circ = new Ellipse2D.Double(
+						ponto.getX(), yVirtual, 5, 5);
 				g2d.fill(circ);
 			}			
 		}
@@ -144,7 +143,8 @@ public class TelaGrafico extends JPanel {
 				Ponto prox = pontos.get(i+1);
 				double yProxV = converter(prox.getY(), getHeight());
 				
-				Line2D.Double line = new Line2D.Double(p.getX(), yVirtual, prox.getX(), yProxV);
+				Line2D.Double line = new Line2D.Double(
+						p.getX(), yVirtual, prox.getX(), yProxV);
 				g2d.draw(line);
 				
 			}
@@ -189,7 +189,8 @@ public class TelaGrafico extends JPanel {
 						Ponto pProx = curvaaa.get(i+1);
 						double yProxV = converter(pProx.getY(), getHeight());
 						
-						Line2D.Double line = new Line2D.Double(p.getX(), yVirtual, pProx.getX(), yProxV);
+						Line2D.Double line = new Line2D.Double(
+								p.getX(), yVirtual, pProx.getX(), yProxV);
 						g2d.draw(line);
 						
 						
@@ -314,22 +315,22 @@ public class TelaGrafico extends JPanel {
 				Math.pow( p.getX() - xMouse, 2) +
 				Math.pow( p.getY() - yMouse, 2));
 		
-		return (distancia <= 4);
+		return (distancia <= 5);
 	}
 	
-	public Ponto temPonto(double xMouse, double yMouse) {
+	public int temPonto(double xMouse, double yMouse) {
 		
-		Ponto ponto = null;
+		int indice = -1;
 		boolean achou = false;
 		
-		for(int i=0; i<pontos.size() || achou; i++) {
+		for(int i=0; i<pontos.size() && !achou; i++) {
 			
 			Ponto p = pontos.get(i);
 			achou = algumPerto(p, xMouse, yMouse);
-			if(achou) ponto = p;
+			if(achou) indice = i;
 		}
 		
-		return ponto;
+		return indice;
 	}
 	
 }

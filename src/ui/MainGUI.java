@@ -74,7 +74,8 @@ public class MainGUI extends JFrame{
 		
 		getContentPane().setBackground(new Color(204, 255, 255));
 		setResizable(false);
-		setTitle("Eleva\u00E7\u00E3o de grau de curva de B\u00E9zier - janela principal");
+		setTitle("Eleva\u00E7\u00E3o de grau de curva de "
+				+ "B\u00E9zier - janela principal");
 		setBounds(100, 100, 700, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -95,10 +96,10 @@ public class MainGUI extends JFrame{
 				avalInc = calcularValorInc(numAval);
 				tela.setAvalInc(avalInc);
 				tela.repaint();
-				
 			}
 		});
-		spinner.setModel(new SpinnerNumberModel(new Integer(numAval), new Integer(1), null, new Integer(1)));
+		spinner.setModel(new SpinnerNumberModel(new Integer(numAval), 
+				new Integer(1), null, new Integer(1)));
 		spinner.setBounds(589, 354, 48, 23);
 		getContentPane().add(spinner);
 		
@@ -115,9 +116,6 @@ public class MainGUI extends JFrame{
 		btnResetar.setBounds(564, 11, 98, 40);
 		btnResetar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
 				resetar();
 			}
 		});
@@ -127,9 +125,6 @@ public class MainGUI extends JFrame{
 		btnEsconderCurva.setBounds(546, 62, 134, 40);
 		btnEsconderCurva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
 				escondeCurva();
 			}
 		});
@@ -139,9 +134,6 @@ public class MainGUI extends JFrame{
 		btnEsconderPontos.setBounds(546, 113, 134, 40);
 		btnEsconderPontos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
 				escondePontos();
 			}
 		});
@@ -151,35 +143,19 @@ public class MainGUI extends JFrame{
 		btnEsconderPoligonal.setBounds(542, 164, 142, 40);
 		btnEsconderPoligonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
 				escondePoligonal();
 			}
 		});
 		getContentPane().add(btnEsconderPoligonal);
-		
-		JButton btnTest = new JButton("test");
-		btnTest.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				tela.printArrayList();
-				
-			}
-		});
-		btnTest.setBounds(590, 404, 66, 23);
-		getContentPane().add(btnTest);
-		btnTest.setVisible(false);
 		
 		JButton btnElevarGrau = new JButton("Elevar grau");
 		btnElevarGrau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				MainGUI janelaNova = new MainGUI(numAval);
-				janelaNova.setTitle("Eleva\u00E7\u00E3o de grau de curva de B\u00E9zier - curva elevada");
+				janelaNova.setTitle("Eleva\u00E7\u00E3o de grau de curva de"
+						+ " B\u00E9zier - curva elevada");
 				janelaNova.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-				
-				
 				
 				ArrayList<Ponto> novosPontos = tela.elevarGrau();
 				TelaGrafico telaNova = janelaNova.getTela();
@@ -188,17 +164,11 @@ public class MainGUI extends JFrame{
 				telaNova.setPontos(novosPontos);
 				telaNova.repaint();
 				
-				
-				
-				
 				janelaNova.setVisible(true);
 			}
 		});
 		btnElevarGrau.setBounds(559, 245, 108, 40);
 		getContentPane().add(btnElevarGrau);
-		
-		
-		
 	}
 	
 	private void resetar(){
@@ -217,7 +187,6 @@ public class MainGUI extends JFrame{
 		}
 		
 		mostraPoligonal = !mostraPoligonal;
-		
 	}
 	
 	private void escondeCurva(){
