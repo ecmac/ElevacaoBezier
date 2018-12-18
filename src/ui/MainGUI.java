@@ -1,28 +1,23 @@
 package ui;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.EventQueue;
-import java.awt.Graphics2D;
-import java.awt.Image;
-
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
-import javax.swing.text.JTextComponent;
-
 import mat.Ponto;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
+@SuppressWarnings("serial")
 public class MainGUI extends JFrame{
 	
 	private TelaGrafico tela;
@@ -35,6 +30,9 @@ public class MainGUI extends JFrame{
 	
 	private boolean mostraPontos = true;
 	JButton btnEsconderPontos;
+	
+	private double avalInc;
+	private int numAval;
 
 	/**
 	 * Launch the application.
@@ -55,7 +53,13 @@ public class MainGUI extends JFrame{
 	/**
 	 * Create the application.
 	 */
+	public MainGUI(int numAval) {
+		this.numAval = numAval;
+		initialize();
+	}
+	
 	public MainGUI() {
+		this.numAval = 10;
 		initialize();
 	}
 
@@ -70,12 +74,37 @@ public class MainGUI extends JFrame{
 		
 		getContentPane().setBackground(new Color(204, 255, 255));
 		setResizable(false);
-		setTitle("Eleva\u00E7\u00E3o de grau de curva de B\u00E9zier");
+		setTitle("Eleva\u00E7\u00E3o de grau de curva de B\u00E9zier - janela principal");
 		setBounds(100, 100, 700, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
-		tela = new TelaGrafico();
+		JLabel lblAvaliaes = new JLabel("Avalia\u00E7\u00F5es");
+		lblAvaliaes.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAvaliaes.setBounds(563, 320, 100, 30);
+		getContentPane().add(lblAvaliaes);
+		
+		JSpinner spinner = new JSpinner();
+		spinner.addChangeListener(new ChangeListener() {
+			
+			//Número de avaliações modificado
+			public void stateChanged(ChangeEvent arg0) {
+				
+				Integer integer = (Integer) spinner.getValue();
+				numAval = integer.intValue();
+				avalInc = calcularValorInc(numAval);
+				tela.setAvalInc(avalInc);
+				tela.repaint();
+				
+			}
+		});
+		spinner.setModel(new SpinnerNumberModel(new Integer(numAval), new Integer(1), null, new Integer(1)));
+		spinner.setBounds(589, 354, 48, 23);
+		getContentPane().add(spinner);
+		
+		avalInc = calcularValorInc(numAval);
+		
+		tela = new TelaGrafico(avalInc);
 		tela.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		tela.setBackground(Color.WHITE);
 		tela.setBounds(10, 11, 522, 449);
@@ -140,18 +169,22 @@ public class MainGUI extends JFrame{
 		});
 		btnTest.setBounds(590, 404, 66, 23);
 		getContentPane().add(btnTest);
+		btnTest.setVisible(false);
 		
 		JButton btnElevarGrau = new JButton("Elevar grau");
 		btnElevarGrau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				MainGUI janelaNova = new MainGUI();
+				MainGUI janelaNova = new MainGUI(numAval);
+				janelaNova.setTitle("Eleva\u00E7\u00E3o de grau de curva de B\u00E9zier - curva elevada");
 				janelaNova.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 				
 				
 				
 				ArrayList<Ponto> novosPontos = tela.elevarGrau();
 				TelaGrafico telaNova = janelaNova.getTela();
+				telaNova.setAvalInc(avalInc);
+				
 				telaNova.setPontos(novosPontos);
 				telaNova.repaint();
 				
@@ -161,9 +194,8 @@ public class MainGUI extends JFrame{
 				janelaNova.setVisible(true);
 			}
 		});
-		btnElevarGrau.setBounds(559, 275, 108, 40);
+		btnElevarGrau.setBounds(559, 245, 108, 40);
 		getContentPane().add(btnElevarGrau);
-		btnTest.setVisible(false);
 		
 		
 		
@@ -215,6 +247,7 @@ public class MainGUI extends JFrame{
 		mostraPontos = !mostraPontos;
 	}
 	
-
-	
+	private double calcularValorInc(int numAval) {
+		return 1.0/((double)numAval + 1.0);
+	}
 }

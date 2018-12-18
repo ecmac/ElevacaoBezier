@@ -3,6 +3,7 @@ package ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -10,11 +11,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import mat.CurvaBezier;
-import mat.Funcoes;
 import mat.Ponto;
 import java.awt.event.MouseMotionAdapter;
 
@@ -34,7 +33,12 @@ public class TelaGrafico extends JPanel {
 	private boolean arrastar = false;
 	private int indiceArrastado;
 	
-	public TelaGrafico(){
+	private double avalInc;
+	
+	public TelaGrafico(double avalInc){
+		
+		this.avalInc = avalInc;
+		
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent arg0) {
@@ -55,6 +59,11 @@ public class TelaGrafico extends JPanel {
 		setBackground(Color.WHITE);
 		
 		addMouseListener(new MouseAdapter() {
+			
+			/**
+			 * Se apertou mas não soltou na mesma
+			 * posição, então quer mover o ponto.
+			 */
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				
@@ -69,7 +78,7 @@ public class TelaGrafico extends JPanel {
 					double xP = pt.getX();
 					double yP = pt.getY();
 					
-					if(x==xP && y==realY){
+					if(x==xP && realY==yP){
 						tem = true;
 						arrastar = true;
 						indiceArrastado = i;
@@ -85,6 +94,7 @@ public class TelaGrafico extends JPanel {
 				arrastar = false;
 			}
 			
+			//Apenas criar ponto de controle novo
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
@@ -99,6 +109,10 @@ public class TelaGrafico extends JPanel {
 				
 			}
 		});
+	}
+
+	public void setAvalInc(double avalInc) {
+		this.avalInc = avalInc;
 	}
 
 	@Override
@@ -149,8 +163,8 @@ public class TelaGrafico extends JPanel {
 					double yVirtual = converter(p.getY(), getHeight());
 					
 					//Desenhar o subponto
-					Ellipse2D.Double circ = new Ellipse2D.Double(p.getX(), yVirtual, 1, 1);
-					g2d.fill(circ);
+					/**Ellipse2D.Double circ = new Ellipse2D.Double(p.getX(), yVirtual, 1, 1);
+					g2d.fill(circ);**/
 					
 					//Reta do primeiro ponto de controle ao primeiro subponto
 					if(i==0){
@@ -220,7 +234,7 @@ public class TelaGrafico extends JPanel {
 	public void calcularCurvaPontos(){
 		
 		curvaaa= new ArrayList<Ponto>();
-		for(double t=0.01; t<1; t=t+0.01){
+		for(double t=avalInc; t<1; t=t+avalInc){
 			curvaaa.add(fazerPontoDaCurva(t));
 		}
 	}
@@ -249,7 +263,8 @@ public class TelaGrafico extends JPanel {
 
 	public void printArrayList(){
 		for(Ponto ponto : pontos){
-			System.out.println(ponto.toString() + ", yVirtual: " + converter(ponto.getY(), getHeight()));
+			System.out.println(ponto.toString() + ", yVirtual: " 
+					+ converter(ponto.getY(), getHeight()));
 		}
 	}
 	
@@ -291,6 +306,30 @@ public class TelaGrafico extends JPanel {
 		depois.add(antes[(int)n]);
 		
 		return depois;
+	}
+	
+	private boolean algumPerto(Ponto p, double xMouse, double yMouse) {
+		
+		double distancia = Math.sqrt(
+				Math.pow( p.getX() - xMouse, 2) +
+				Math.pow( p.getY() - yMouse, 2));
+		
+		return (distancia <= 4);
+	}
+	
+	public Ponto temPonto(double xMouse, double yMouse) {
+		
+		Ponto ponto = null;
+		boolean achou = false;
+		
+		for(int i=0; i<pontos.size() || achou; i++) {
+			
+			Ponto p = pontos.get(i);
+			achou = algumPerto(p, xMouse, yMouse);
+			if(achou) ponto = p;
+		}
+		
+		return ponto;
 	}
 	
 }
