@@ -17,7 +17,7 @@ Conceito geral: O projeto deve implementar o cálculo e desenho de curvas de Bé
 - A atualização da curva é feita em tempo real.
 - O programa deve ter botões para esconder/exibir: pontos de controle, poligonal de controle, curva de Bézier.
 
-Aplicação específica: Elevação de Grau da Curva de Bézier
+Aplicação específica: Elevação de Grau da Curva de Bézier.
 O usuário poderá solicitar o aumento do grau da curva (que não modifica o formato da curva), e ele passa a manipular 
 os novos pontos de controle.
 
