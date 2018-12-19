@@ -219,7 +219,7 @@ public class TelaGrafico extends JPanel {
 	 * Slides do capítulo 4
 	 * Slides 16 a 20
 	 */
-	public ArrayList<Ponto> elevarGrau(){
+	public void elevarGrau(){
 		
 		ArrayList<Ponto> antes = pontos;
 		
@@ -243,7 +243,8 @@ public class TelaGrafico extends JPanel {
 		
 		depois.add(antes.get((int)n));
 		
-		return depois;
+		pontos = depois;
+		repaint();
 	}
 	
 	public void toggleCurva(){

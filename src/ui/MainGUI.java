@@ -62,7 +62,7 @@ public class MainGUI extends JFrame{
 	}
 	
 	public MainGUI() {
-		this.numAval = 99;
+		this.numAval = 299;
 		initialize();
 	}
 
@@ -77,8 +77,7 @@ public class MainGUI extends JFrame{
 		
 		getContentPane().setBackground(new Color(204, 255, 255));
 		setResizable(false);
-		setTitle("Eleva\u00E7\u00E3o de grau de curva de "
-				+ "B\u00E9zier - janela principal");
+		setTitle("Eleva\u00E7\u00E3o de grau de curva de B\u00E9zier - ecmac e gcrb");
 		setBounds(100, 100, 800, 550);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -154,12 +153,7 @@ public class MainGUI extends JFrame{
 		JButton btnElevarGrau = new JButton("Elevar grau");
 		btnElevarGrau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				ArrayList<Ponto> novosPontos = tela.elevarGrau();
-				tela.setPontos(novosPontos);
-				
-				tela.repaint();
-				
+				tela.elevarGrau();
 			}
 		});
 		btnElevarGrau.setBounds(659, 271, 108, 40);
