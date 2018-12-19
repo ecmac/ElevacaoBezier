@@ -1,28 +1,31 @@
 package mat;
 
+import java.util.ArrayList;
+
 public class CurvaBezier {
 	
 	private int grau;
-	private Ponto[] controles;
+	private ArrayList<Ponto> controles;
 	private double t;
 	private int qtd;
+	private Ponto[][] matriz = null;
 	
-	public CurvaBezier(int grau, Ponto[] controles, double t) {
+	public CurvaBezier(int grau, ArrayList<Ponto> controles, double t) {
 		this.grau = grau;
 		this.controles = controles;
 		this.t = t;
-		this.qtd = controles.length;
+		this.qtd = controles.size();
 	}
 
 	public int getQtd() {
 		return qtd;
 	}
 
-	public Ponto[] getControles() {
+	public ArrayList<Ponto> getControles() {
 		return controles;
 	}
 
-	public void setControles(Ponto[] controles) {
+	public void setControles(ArrayList<Ponto> controles) {
 		this.controles = controles;
 	}
 
@@ -38,15 +41,28 @@ public class CurvaBezier {
 		return (a.mult(1-t)).adi(b.mult(t));
 	}
 	
-	public Ponto birt(int i, int r){
+	public Ponto deCasteljauRecursivoOtimizado(int i, int r){
 		
-		if(r==0) return controles[i];
+		if(matriz==null) {
+			matriz = new Ponto[r+1][r+1];
+		}
 		
-		Ponto esq = birt(i, r-1);
-		Ponto dir = birt(i+1, r-1);
+		if(r==0) {
+			matriz[i][0] = controles.get(i);
+			return controles.get(i);
+		}
 		
-		return interp(esq, dir, t);
+		if(matriz[i][r-1]==null) {
+			matriz[i][r-1] = deCasteljauRecursivoOtimizado(i, r-1);
+		}
+		
+		if(matriz[i+1][r-1]==null) {
+			matriz[i+1][r-1] = deCasteljauRecursivoOtimizado(i+1, r-1);
+		}
+		
+		return interp(matriz[i][r-1], matriz[i+1][r-1], t);
 	}
+	
 }
 
 

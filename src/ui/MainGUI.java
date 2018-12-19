@@ -62,7 +62,7 @@ public class MainGUI extends JFrame{
 	}
 	
 	public MainGUI() {
-		this.numAval = 10;
+		this.numAval = 99;
 		initialize();
 	}
 
@@ -79,13 +79,13 @@ public class MainGUI extends JFrame{
 		setResizable(false);
 		setTitle("Eleva\u00E7\u00E3o de grau de curva de "
 				+ "B\u00E9zier - janela principal");
-		setBounds(100, 100, 700, 500);
+		setBounds(100, 100, 800, 550);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
 		JLabel lblAvaliaes = new JLabel("Avalia\u00E7\u00F5es");
 		lblAvaliaes.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAvaliaes.setBounds(564, 309, 100, 30);
+		lblAvaliaes.setBounds(663, 322, 100, 30);
 		getContentPane().add(lblAvaliaes);
 		
 		JSpinner spinner = new JSpinner();
@@ -103,7 +103,7 @@ public class MainGUI extends JFrame{
 		});
 		spinner.setModel(new SpinnerNumberModel(new Integer(numAval), 
 				new Integer(1), null, new Integer(1)));
-		spinner.setBounds(590, 343, 48, 23);
+		spinner.setBounds(689, 356, 48, 23);
 		getContentPane().add(spinner);
 		
 		avalInc = calcularValorInc(numAval);
@@ -111,12 +111,12 @@ public class MainGUI extends JFrame{
 		tela = new TelaGrafico(avalInc);
 		tela.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		tela.setBackground(Color.WHITE);
-		tela.setBounds(10, 11, 522, 449);
+		tela.setBounds(10, 11, 622, 499);
 		getContentPane().add(tela);
 		tela.setLayout(null);
 		
 		JButton btnResetar = new JButton("Resetar");
-		btnResetar.setBounds(564, 11, 98, 40);
+		btnResetar.setBounds(664, 24, 98, 40);
 		btnResetar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				resetar();
@@ -125,7 +125,7 @@ public class MainGUI extends JFrame{
 		getContentPane().add(btnResetar);
 		
 		btnEsconderCurva = new JButton("Esconder curva");
-		btnEsconderCurva.setBounds(546, 62, 134, 40);
+		btnEsconderCurva.setBounds(646, 75, 134, 40);
 		btnEsconderCurva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				escondeCurva();
@@ -134,7 +134,7 @@ public class MainGUI extends JFrame{
 		getContentPane().add(btnEsconderCurva);
 		
 		btnEsconderPontos = new JButton("Esconder pontos");
-		btnEsconderPontos.setBounds(546, 113, 134, 40);
+		btnEsconderPontos.setBounds(646, 126, 134, 40);
 		btnEsconderPontos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				escondePontos();
@@ -143,7 +143,7 @@ public class MainGUI extends JFrame{
 		getContentPane().add(btnEsconderPontos);
 		
 		btnEsconderPoligonal = new JButton("Esconder poligonal");
-		btnEsconderPoligonal.setBounds(542, 164, 142, 40);
+		btnEsconderPoligonal.setBounds(642, 178, 142, 40);
 		btnEsconderPoligonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				escondePoligonal();
@@ -155,22 +155,14 @@ public class MainGUI extends JFrame{
 		btnElevarGrau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				MainGUI janelaNova = new MainGUI(numAval);
-				janelaNova.setTitle("Eleva\u00E7\u00E3o de grau de curva de"
-						+ " B\u00E9zier - curva elevada");
-				janelaNova.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-				
 				ArrayList<Ponto> novosPontos = tela.elevarGrau();
-				TelaGrafico telaNova = janelaNova.getTela();
-				telaNova.setAvalInc(avalInc);
+				tela.setPontos(novosPontos);
 				
-				telaNova.setPontos(novosPontos);
-				telaNova.repaint();
+				tela.repaint();
 				
-				janelaNova.setVisible(true);
 			}
 		});
-		btnElevarGrau.setBounds(559, 245, 108, 40);
+		btnElevarGrau.setBounds(659, 271, 108, 40);
 		getContentPane().add(btnElevarGrau);
 		
 		JCheckBox chckbxClicarApagar = new JCheckBox("Clicar \u00E9 apagar");
@@ -183,7 +175,7 @@ public class MainGUI extends JFrame{
 		});
 		chckbxClicarApagar.setBackground(new Color(255, 153, 0));
 		chckbxClicarApagar.setHorizontalAlignment(SwingConstants.CENTER);
-		chckbxClicarApagar.setBounds(552, 400, 123, 40);
+		chckbxClicarApagar.setBounds(652, 413, 123, 40);
 		getContentPane().add(chckbxClicarApagar);
 	}
 	

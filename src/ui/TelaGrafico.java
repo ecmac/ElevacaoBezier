@@ -22,11 +22,14 @@ public class TelaGrafico extends JPanel {
 	private ArrayList<Ponto> pontos;
 	private ArrayList<Ponto> curvaaa;
 	
-	private Graphics2D g2d;
-	
 	private boolean mostrarCurva = true;
 	private boolean mostrarPontos = true;
 	private boolean mostrarPoligonal = true;
+	
+	
+	private boolean atualizarCurva = true;
+	private boolean atualizarPontos = true;
+	private boolean atualizarPoligonal = true;
 	
 	private boolean arrastar = false;
 	private int indiceArrastado;
@@ -125,81 +128,89 @@ public class TelaGrafico extends JPanel {
 	public void paintComponent(Graphics g){
 		
 		super.paintComponent(g);
-		g2d = (Graphics2D)g;
+		Graphics2D g2d = (Graphics2D)g;
 		
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.blue);
 		
-		if(mostrarPontos){
-			for(Ponto ponto : pontos){
-				double yVirtual = converter(ponto.getY(), getHeight());
-				Ellipse2D.Double circ = new Ellipse2D.Double(
-						ponto.getX(), yVirtual, 5, 5);
-				g2d.fill(circ);
-			}			
+		if(mostrarPontos && atualizarPontos){
+			atualizaPontos(g2d);
 		}
 		
+		if(mostrarPoligonal && atualizarPoligonal){
+			atualizaPoligonal(g2d);
+		}
 		
-		
-		if(mostrarPoligonal){
+		if(mostrarCurva && atualizarCurva){
+			atualizaCurva(g2d);		
+		}
+	}
+	
+	private void atualizaPontos(Graphics2D g2d) {
+		for(Ponto ponto : pontos){
+			double yVirtual = converter(ponto.getY(), getHeight());
+			Ellipse2D.Double circ = new Ellipse2D.Double(
+					ponto.getX(), yVirtual, 5, 5);
+			g2d.fill(circ);
+		}	
+	}
+	
+	private void atualizaPoligonal(Graphics2D g2d) {
+		for(int i=0; i<pontos.size()-1; i++){
 			
-			for(int i=0; i<pontos.size()-1; i++){
+			Ponto p = pontos.get(i);
+			double yVirtual = converter(p.getY(), getHeight());
+			
+			Ponto prox = pontos.get(i+1);
+			double yProxV = converter(prox.getY(), getHeight());
+			
+			Line2D.Double line = new Line2D.Double(
+					p.getX(), yVirtual, prox.getX(), yProxV);
+			g2d.draw(line);
+			
+		}
+	}
+	
+	
+	private void atualizaCurva(Graphics2D g2d) {
+		if(pontos.size()>=2){
+			
+			calcularCurvaPontos();
+			
+			for(int i=0; i<curvaaa.size(); i++){
 				
-				Ponto p = pontos.get(i);
+				Ponto p = curvaaa.get(i);
 				double yVirtual = converter(p.getY(), getHeight());
 				
-				Ponto prox = pontos.get(i+1);
-				double yProxV = converter(prox.getY(), getHeight());
-				
-				Line2D.Double line = new Line2D.Double(
-						p.getX(), yVirtual, prox.getX(), yProxV);
-				g2d.draw(line);
-				
-			}
-		}
-		
-		
-		if(mostrarCurva){
-			
-			if(pontos.size()>=2){
-				
-				calcularCurvaPontos();
-				
-				for(int i=0; i<curvaaa.size(); i++){
-					
-					Ponto p = curvaaa.get(i);
-					double yVirtual = converter(p.getY(), getHeight());
-					
-					//Reta do primeiro ponto de controle ao primeiro subponto
-					if(i==0){
-						Ponto p1 = pontos.get(0);
-						double y00V = converter(p1.getY(), getHeight());
-						Line2D.Double line1 = new Line2D.Double(p1.getX(), y00V,
-								p.getX(), yVirtual);
-						g2d.draw(line1);
-					}
-					
-					//Reta do ultimo subponto ao ultimo ponto de controle
-					if(i==(curvaaa.size()-1)){
-						Ponto pF = pontos.get(pontos.size()-1);
-						double yUltimoV = converter(pF.getY(), getHeight());
-						Line2D.Double lineLast = new Line2D.Double(p.getX(), yVirtual, 
-								pF.getX(), yUltimoV);
-						g2d.draw(lineLast);
-					}
-					
-					//Desenhar a reta ao proximo subponto
-					else {
-						Ponto pProx = curvaaa.get(i+1);
-						double yProxV = converter(pProx.getY(), getHeight());
-						
-						Line2D.Double line = new Line2D.Double(
-								p.getX(), yVirtual, pProx.getX(), yProxV);
-						g2d.draw(line);
-					}
+				//Reta do primeiro ponto de controle ao primeiro subponto
+				if(i==0){
+					Ponto p1 = pontos.get(0);
+					double y00V = converter(p1.getY(), getHeight());
+					Line2D.Double line1 = new Line2D.Double(p1.getX(), y00V,
+							p.getX(), yVirtual);
+					g2d.draw(line1);
 				}
-			}			
+				
+				//Reta do ultimo subponto ao ultimo ponto de controle
+				if(i==(curvaaa.size()-1)){
+					Ponto pF = pontos.get(pontos.size()-1);
+					double yUltimoV = converter(pF.getY(), getHeight());
+					Line2D.Double lineLast = new Line2D.Double(p.getX(), yVirtual, 
+							pF.getX(), yUltimoV);
+					g2d.draw(lineLast);
+				}
+				
+				//Desenhar a reta ao proximo subponto
+				else {
+					Ponto pProx = curvaaa.get(i+1);
+					double yProxV = converter(pProx.getY(), getHeight());
+					
+					Line2D.Double line = new Line2D.Double(
+							p.getX(), yVirtual, pProx.getX(), yProxV);
+					g2d.draw(line);
+				}
+			}
 		}
 	}
 	
@@ -210,47 +221,68 @@ public class TelaGrafico extends JPanel {
 	 */
 	public ArrayList<Ponto> elevarGrau(){
 		
-		Ponto[] antes = getArray(pontos);
+		ArrayList<Ponto> antes = pontos;
 		
-		double n = antes.length - 1.0;
-		
-		//Ponto[] depois = new Ponto[antes.length + 1];
+		double n = antes.size() - 1.0;
 		
 		ArrayList<Ponto> depois = new ArrayList<Ponto>();
 		
-		depois.add(antes[0]);
+		depois.add(antes.get(0));
 		
 		
 		for(double i=1.0; i<=n; i++){
-			//depois[i] = ((double)i/(n+1))*antes[i-1] + 
-			double m1 = i/(n+1.0);
-			Ponto p1 = antes[(int)i - 1].mult(m1);
 			
-			//(1.0 - (double)i/(n+1))*antes[i]
+			double m1 = i/(n+1.0);
+			Ponto p1 = antes.get((int)i - 1).mult(m1);
+			
 			double m2 = 1.0 - (i/(n+1.0));
-			Ponto p2 = antes[(int)i].mult(m2);
+			Ponto p2 = antes.get((int)i).mult(m2);
 			
 			depois.add(p1.adi(p2));
 		}
 		
-		depois.add(antes[(int)n]);
+		depois.add(antes.get((int)n));
 		
 		return depois;
 	}
 	
 	public void toggleCurva(){
 		mostrarCurva = !mostrarCurva;
+		
+		atualizarCurva = true;
+		atualizarPoligonal = false;
+		atualizarPontos = false;
+		
 		repaint();
+		
+		atualizarPoligonal = true;
+		atualizarPontos = true;
 	}
 	
 	public void togglePontos(){
 		mostrarPontos = !mostrarPontos;
+		
+		atualizarCurva = false;
+		atualizarPoligonal = false;
+		atualizarPontos = true;
+		
 		repaint();
+		
+		atualizarCurva = true;
+		atualizarPoligonal = true;
 	}
 	
 	public void togglePoligonal(){
 		mostrarPoligonal = !mostrarPoligonal;
+		
+		atualizarCurva = false;
+		atualizarPoligonal = true;
+		atualizarPontos = false;
+		
 		repaint();
+		
+		atualizarCurva = true;
+		atualizarPontos = true;
 	}
 	
 	public void resetar(){
@@ -261,9 +293,8 @@ public class TelaGrafico extends JPanel {
 	public Ponto fazerPontoDaCurva(double t){
 		
 		int grau = pontos.size() - 1;
-		Ponto[] controles = getArray(pontos);
-		CurvaBezier curvaBezier = new CurvaBezier(grau, controles, t);
-		return curvaBezier.birt(0, grau);
+		CurvaBezier curvaBezier = new CurvaBezier(grau, pontos, t);
+		return curvaBezier.deCasteljauRecursivoOtimizado(0, grau);
 	}
 	
 	public void calcularCurvaPontos(){
@@ -296,19 +327,6 @@ public class TelaGrafico extends JPanel {
 		}
 		
 		return indice;
-	}
-	
-	public Ponto[] getArray(ArrayList<Ponto> al){
-		
-		int length = al.size();
-		Ponto[] array = new Ponto[length];
-		
-		int i = 0;
-		for(Ponto ponto : al){
-			array[i] = ponto;
-			i++;
-		}
-		return array;
 	}
 	
 	public void setAvalInc(double avalInc) {
