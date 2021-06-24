@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.JFrame;
 import java.awt.EventQueue;
+import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -90,7 +91,7 @@ public class MainGUI extends JFrame{
 		JSpinner spinner = new JSpinner();
 		spinner.addChangeListener(new ChangeListener() {
 			
-			//Número de avaliações modificado
+			//Numero de avaliacoes modificado
 			public void stateChanged(ChangeEvent arg0) {
 				
 				Integer integer = (Integer) spinner.getValue();
@@ -116,6 +117,7 @@ public class MainGUI extends JFrame{
 		
 		JButton btnResetar = new JButton("Resetar");
 		btnResetar.setBounds(664, 24, 98, 40);
+		btnResetar.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnResetar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				resetar();
@@ -125,6 +127,7 @@ public class MainGUI extends JFrame{
 		
 		btnEsconderCurva = new JButton("Esconder curva");
 		btnEsconderCurva.setBounds(646, 75, 134, 40);
+		btnEsconderCurva.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnEsconderCurva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				escondeCurva();
@@ -134,6 +137,7 @@ public class MainGUI extends JFrame{
 		
 		btnEsconderPontos = new JButton("Esconder pontos");
 		btnEsconderPontos.setBounds(646, 126, 134, 40);
+		btnEsconderPontos.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnEsconderPontos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				escondePontos();
@@ -143,6 +147,7 @@ public class MainGUI extends JFrame{
 		
 		btnEsconderPoligonal = new JButton("Esconder poligonal");
 		btnEsconderPoligonal.setBounds(642, 178, 142, 40);
+		btnEsconderPoligonal.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnEsconderPoligonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				escondePoligonal();
@@ -151,6 +156,7 @@ public class MainGUI extends JFrame{
 		getContentPane().add(btnEsconderPoligonal);
 		
 		JButton btnElevarGrau = new JButton("Elevar grau");
+		btnElevarGrau.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnElevarGrau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				tela.elevarGrau();
@@ -170,6 +176,7 @@ public class MainGUI extends JFrame{
 		chckbxClicarApagar.setBackground(new Color(255, 153, 0));
 		chckbxClicarApagar.setHorizontalAlignment(SwingConstants.CENTER);
 		chckbxClicarApagar.setBounds(652, 413, 123, 40);
+		chckbxClicarApagar.setFont(new Font("Arial", Font.PLAIN, 10));
 		getContentPane().add(chckbxClicarApagar);
 	}
 	

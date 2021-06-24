@@ -46,7 +46,7 @@ public class TelaGrafico extends JPanel {
 			
 			/**
 			 * Arrastar para mover o ponto
-			 * de controle de posição
+			 * de controle de posicao
 			 */
 			@Override
 			public void mouseDragged(MouseEvent arg0) {
@@ -67,8 +67,8 @@ public class TelaGrafico extends JPanel {
 		addMouseListener(new MouseAdapter() {
 			
 			/**
-			 * Se apertou mas não soltou na mesma
-			 * posição, então quer mover o ponto.
+			 * Se apertou mas nao soltou na mesma
+			 * posicao, entao quer mover o ponto.
 			 */
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -86,7 +86,7 @@ public class TelaGrafico extends JPanel {
 			
 			/**
 			 * Se soltou e estava arrastando
-			 * então pare de arrastar o ponto de controle
+			 * entao pare de arrastar o ponto de controle
 			 */
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -150,8 +150,9 @@ public class TelaGrafico extends JPanel {
 	private void atualizaPontos(Graphics2D g2d) {
 		for(Ponto ponto : pontos){
 			double yVirtual = converter(ponto.getY(), getHeight());
-			Ellipse2D.Double circ = new Ellipse2D.Double(
-					ponto.getX(), yVirtual, 5, 5);
+			Ellipse2D.Double circ = new Ellipse2D.Double(ponto.getX(), yVirtual, 5, 5);
+
+			g2d.setColor(Color.BLACK);
 			g2d.fill(circ);
 		}	
 	}
@@ -165,8 +166,9 @@ public class TelaGrafico extends JPanel {
 			Ponto prox = pontos.get(i+1);
 			double yProxV = converter(prox.getY(), getHeight());
 			
-			Line2D.Double line = new Line2D.Double(
-					p.getX(), yVirtual, prox.getX(), yProxV);
+			Line2D.Double line = new Line2D.Double(p.getX(), yVirtual, prox.getX(), yProxV);
+			
+			g2d.setColor(Color.blue);
 			g2d.draw(line);
 			
 		}
@@ -187,8 +189,9 @@ public class TelaGrafico extends JPanel {
 				if(i==0){
 					Ponto p1 = pontos.get(0);
 					double y00V = converter(p1.getY(), getHeight());
-					Line2D.Double line1 = new Line2D.Double(p1.getX(), y00V,
-							p.getX(), yVirtual);
+					Line2D.Double line1 = new Line2D.Double(p1.getX(), y00V, p.getX(), yVirtual);
+					
+					g2d.setColor(Color.red);
 					g2d.draw(line1);
 				}
 				
@@ -196,8 +199,9 @@ public class TelaGrafico extends JPanel {
 				if(i==(curvaaa.size()-1)){
 					Ponto pF = pontos.get(pontos.size()-1);
 					double yUltimoV = converter(pF.getY(), getHeight());
-					Line2D.Double lineLast = new Line2D.Double(p.getX(), yVirtual, 
-							pF.getX(), yUltimoV);
+					Line2D.Double lineLast = new Line2D.Double(p.getX(), yVirtual, pF.getX(), yUltimoV);
+					
+					g2d.setColor(Color.red);
 					g2d.draw(lineLast);
 				}
 				
@@ -208,6 +212,8 @@ public class TelaGrafico extends JPanel {
 					
 					Line2D.Double line = new Line2D.Double(
 							p.getX(), yVirtual, pProx.getX(), yProxV);
+					
+					g2d.setColor(Color.red);
 					g2d.draw(line);
 				}
 			}
@@ -216,7 +222,7 @@ public class TelaGrafico extends JPanel {
 	
 	/* FONTE:
 	 * Farin & Hansford - The Essentials of CAGD
-	 * Slides do capítulo 4
+	 * Slides do capitulo 4
 	 * Slides 16 a 20
 	 */
 	public void elevarGrau(){
